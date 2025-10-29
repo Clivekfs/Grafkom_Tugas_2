@@ -1,7 +1,3 @@
-// main.js
-// Titik masuk aplikasi, mengelola state global, loop animasi, dan interaksi pengguna.
-
-// Variabel Global
 let gl;
 let shaderProgram;
 let cubeVertexBuffer, cubeIndexBuffer, cubeTexCoordBuffer, cubeNormalBuffer;
@@ -13,6 +9,14 @@ let nMatrix = mat3.create();
 let lastTime = 0;
 let currentAnimation = "walk";
 let animationFrame = 0;
+
+let lightingSettings = {
+  ambient: 0.3,
+  dirX: -0.25,
+  dirY: -0.25,
+  spotCutoff: 25.0,
+  spotExponent: 20.0,
+};
 
 // Variabel Kamera
 let cameraRotationX = 0;
@@ -54,14 +58,24 @@ function start() {
   gl.clearColor(0.53, 0.81, 0.92, 1.0);
   gl.enable(gl.DEPTH_TEST);
 
-  // Setup event listeners untuk kontrol kamera
   canvas.addEventListener("mousedown", handleMouseDown);
   canvas.addEventListener("mousemove", handleMouseMove);
   canvas.addEventListener("mouseup", handleMouseUp);
   canvas.addEventListener("wheel", handleMouseWheel);
   document.addEventListener("keydown", handleKeyDown);
 
+  updateLighting();
+
   tick();
+}
+
+// lighting
+function updateLighting() {
+  lightingSettings.ambient = document.getElementById("ambientIntensity").value;
+  lightingSettings.dirX = document.getElementById("dirLightX").value;
+  lightingSettings.dirY = document.getElementById("dirLightY").value;
+  lightingSettings.spotCutoff = document.getElementById("spotCutoff").value;
+  lightingSettings.spotExponent = document.getElementById("spotExponent").value;
 }
 
 // Loop Animasi
@@ -71,7 +85,6 @@ function tick() {
   animate();
 }
 
-// Fungsi Kontrol Kamera
 function handleMouseDown(event) {
   isDragging = true;
   lastMouseX = event.clientX;
@@ -91,7 +104,6 @@ function handleMouseMove(event) {
   cameraRotationY -= deltaX * 0.01;
   cameraRotationX += deltaY * 0.01;
 
-  // Batasi rotasi vertikal
   cameraRotationX = Math.max(
     -Math.PI / 2,
     Math.min(Math.PI / 2, cameraRotationX)
@@ -108,7 +120,6 @@ function handleMouseWheel(event) {
   const delta = Math.sign(event.deltaY);
   cameraDistance += delta * 0.5;
 
-  // Batasi jarak kamera
   cameraDistance = Math.max(3, Math.min(20, cameraDistance));
   updateCameraPosition();
 }
@@ -132,7 +143,6 @@ function handleKeyDown(event) {
 }
 
 function updateCameraPosition() {
-  // Hitung posisi kamera berdasarkan rotasi dan jarak
   cameraPosition[0] =
     cameraDistance * Math.sin(cameraRotationY) * Math.cos(cameraRotationX);
   cameraPosition[1] = cameraDistance * Math.sin(cameraRotationX);
@@ -192,7 +202,6 @@ function animate() {
   }
 }
 
-// Fungsi Interaksi
 function setAnimation(name) {
   currentAnimation = name;
   animationFrame = 0;
@@ -202,5 +211,4 @@ function toggleTexture(checked) {
   useTexture = checked;
 }
 
-// Titik Masuk Aplikasi
 window.onload = start;

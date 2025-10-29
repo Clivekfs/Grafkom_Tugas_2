@@ -1,6 +1,3 @@
-// scene.js
-// Mengelola semua aspek visual: setup shader, buffer, tekstur, dan logika penggambaran.
-
 function setupShaders() {
   const vsSource = `attribute vec3 aVertexPosition; attribute vec3 aVertexNormal; attribute vec2 aTextureCoord; uniform mat4 uPMatrix; uniform mat4 uMVMatrix; uniform mat3 uNMatrix; uniform vec3 uAmbientColor; uniform vec3 uLightingDirection; uniform vec3 uDirectionalColor; varying vec2 vTextureCoord; varying vec3 vLightWeighting; void main(void) { gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0); vTextureCoord = aTextureCoord; vec3 transformedNormal = uNMatrix * aVertexNormal; float directionalLightWeighting = max(dot(transformedNormal, uLightingDirection), 0.0); vLightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting; }`;
   const fsSource = `precision mediump float; varying vec2 vTextureCoord; varying vec3 vLightWeighting; uniform sampler2D uSampler; uniform bool uUseTexture; void main(void) { vec4 textureColor = texture2D(uSampler, vTextureCoord); vec4 color = uUseTexture ? textureColor : vec4(0.8, 0.5, 0.2, 1.0); gl_FragColor = vec4(color.rgb * vLightWeighting, color.a); }`;
@@ -140,7 +137,6 @@ function drawScene() {
   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-  // Setup perspective projection
   mat4.perspective(
     pMatrix,
     degToRad(45),
@@ -149,23 +145,38 @@ function drawScene() {
     100.0
   );
 
-  // Setup camera view
   mat4.identity(mvMatrix);
-  mat4.lookAt(
-    mvMatrix,
-    cameraPosition, // Camera position
-    [0, 0, 0], // Look at point
-    [0, 1, 0] // Up vector
-  );
+
+  mat4.lookAt(mvMatrix, cameraPosition, [0, 0, 0], [0, 1, 0]);
   gl.uniform1i(shaderProgram.useTextureUniform, useTexture);
-  gl.uniform3f(shaderProgram.ambientColorUniform, 0.3, 0.3, 0.3);
-  let lightingDirection = [-0.25, -0.25, -1.0];
+
+  gl.uniform3f(
+    shaderProgram.ambientColorUniform,
+    lightingSettings.ambient,
+    lightingSettings.ambient,
+    lightingSettings.ambient
+  );
+
+  let lightingDirection = [lightingSettings.dirX, lightingSettings.dirY, -1.0];
   let adjustedLD = vec3.create();
   vec3.normalize(adjustedLD, lightingDirection);
   vec3.scale(adjustedLD, adjustedLD, -1);
   gl.uniform3fv(shaderProgram.lightingDirectionUniform, adjustedLD);
-  gl.uniform3f(shaderProgram.directionalColorUniform, 0.8, 0.8, 0.8);
+  gl.uniform3f(shaderProgram.directionalColorUniform, 0.8, 0.8, 0.8); // Warna directional tetap
 
+  gl.uniform3fv(shaderProgram.spotLightPositionUniform, [0.0, 0.0, 0.0]);
+  gl.uniform3fv(shaderProgram.spotLightDirectionUniform, [0.0, 0.0, -1.0]);
+  gl.uniform3f(shaderProgram.spotLightColorUniform, 1.0, 1.0, 0.8); // Warna spot tetap
+
+  gl.uniform1f(
+    shaderProgram.spotLightCutoffUniform,
+    Math.cos(degToRad(lightingSettings.spotCutoff))
+  );
+
+  gl.uniform1f(
+    shaderProgram.spotLightExponentUniform,
+    lightingSettings.spotExponent
+  );
   mvPushMatrix();
 
   mat4.translate(mvMatrix, mvMatrix, [0.0, joints.torsoY, 0.0]);
