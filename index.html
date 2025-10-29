@@ -2,21 +2,63 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Animasi Kucing WebGL - Terstruktur</title>
+    <title>Tugas 2</title>
     <style>
       body {
         margin: 0;
+        padding: 20px;
+        background-color: #333;
+        font-family: sans-serif;
+        color: white;
+        text-align: center;
+      }
+      /* Kontainer utama untuk semua elemen */
+      #main-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+      }
+      /* Kontainer untuk kanvas dan gambar samping */
+      #top-section {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start; /* Rata atas */
+        gap: 20px; /* Jarak antara kanvas dan gambar */
+      }
+      canvas {
+        border: 2px solid black;
+        background-color: #87ceeb;
+      }
+      #side-image {
+        width: 300px; /* Lebar gambar */
+        height: auto; /* Tinggi otomatis menyesuaikan proporsi */
+        border: 2px solid black;
+        border-radius: 8px;
+      }
+      /* Kontainer untuk video */
+      #video-section {
+        display: flex;
+        justify-content: center;
+        gap: 15px; /* Jarak antar video */
+        padding-top: 15px;
+        border-top: 2px solid #555;
+        width: 100%;
+        max-width: 1124px; /* Lebar maks sama dengan kanvas + gambar */
+      }
+      .video-placeholder {
+        width: 30%;
+        aspect-ratio: 16 / 9; /* Rasio video umum */
+        background-color: #222;
+        border: 1px solid #ccc;
+        border-radius: 5px;
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 100vh;
-        background-color: #333;
-        font-family: sans-serif;
+        font-size: 1.2em;
+        color: #888;
       }
-      canvas {
-        border: 1px solid black;
-        background-color: #87ceeb;
-      }
+      /* Pindahkan controls ke pojok kiri atas halaman */
       #controls {
         position: absolute;
         top: 10px;
@@ -24,6 +66,7 @@
         background: rgba(255, 255, 255, 0.8);
         padding: 10px;
         border-radius: 5px;
+        color: black;
       }
       button,
       label {
@@ -36,7 +79,6 @@
     </style>
   </head>
   <body>
-    <canvas id="glcanvas" width="800" height="600"></canvas>
     <div id="controls">
       <button onclick="setAnimation('walk')">1. Berjalan</button>
       <button onclick="setAnimation('lieDown')">2. Tidur (Loafing)</button>
@@ -53,8 +95,28 @@
       >
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gl-matrix/2.8.1/gl-matrix-min.js"></script>
+    <div id="main-container">
+      <h2> Muhammad Rafli Abdillah 5025231028 <br>
+         Clive Kenaz Fausto Sulastomo 5025231029</h2>
+      <div id="top-section">
+        <canvas id="glcanvas" width="800" height="600"></canvas>
+        <img
+          id="side-image"
+          src="Foto kucing.jpg"
+          alt="Foto Kucing Lucu"
+        />
+      </div>
 
+      <div id="video-section-wrapper">
+        <div id="video-section">
+          <video class="video-placeholder" src="Kucing jalan.mp4" controls></video>
+          <video class="video-placeholder" src="Kucing loafing.mp4" controls></video>
+          <video class="video-placeholder" src="Kucing kaget.mp4" controls></video>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gl-matrix/2.8.1/gl-matrix-min.js"></script>
     <script src="MVnew.js"></script>
     <script src="scene.js"></script>
     <script src="main.js"></script>
