@@ -1,23 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Animasi Kucing WebGL - Terstruktur</title>
     <style>
-        body { margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #333; font-family: sans-serif; }
-        canvas { border: 1px solid black; background-color: #87CEEB; }
-        #controls { position: absolute; top: 10px; left: 10px; background: rgba(255,255,255,0.8); padding: 10px; border-radius: 5px; }
-        button, label { margin: 5px; padding: 5px 10px; border-radius: 3px; border: 1px solid #ccc; cursor: pointer; }
+      body {
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #333;
+        font-family: sans-serif;
+      }
+      canvas {
+        border: 1px solid black;
+        background-color: #87ceeb;
+      }
+      #controls {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background: rgba(255, 255, 255, 0.8);
+        padding: 10px;
+        border-radius: 5px;
+      }
+      button,
+      label {
+        margin: 5px;
+        padding: 5px 10px;
+        border-radius: 3px;
+        border: 1px solid #ccc;
+        cursor: pointer;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <canvas id="glcanvas" width="800" height="600"></canvas>
     <div id="controls">
-        <button onclick="setAnimation('walk')">1. Berjalan</button>
-        <button onclick="setAnimation('lieDown')">2. Tidur (Loafing)</button>
-        <button onclick="setAnimation('startled')">3. Terkejut</button>
-        <hr>
-        <label><input type="checkbox" id="textureToggle" checked onchange="toggleTexture(this.checked)"> Gunakan Tekstur</label>
+      <button onclick="setAnimation('walk')">1. Berjalan</button>
+      <button onclick="setAnimation('lieDown')">2. Tidur (Loafing)</button>
+      <button onclick="setAnimation('startled')">3. Terkejut</button>
+      <hr />
+      <label
+        ><input
+          type="checkbox"
+          id="textureToggle"
+          checked
+          onchange="toggleTexture(this.checked)"
+        />
+        Gunakan Tekstur</label
+      >
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gl-matrix/2.8.1/gl-matrix-min.js"></script>
@@ -25,6 +58,5 @@
     <script src="MVnew.js"></script>
     <script src="scene.js"></script>
     <script src="main.js"></script>
-
-</body>
+  </body>
 </html>
